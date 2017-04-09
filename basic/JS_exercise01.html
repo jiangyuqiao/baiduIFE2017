@@ -70,6 +70,7 @@
             alert("列表为空！");
             return;
         }
+        alert("您删除的元素为： "+list[0].innerHTML);
         queue.removeChild(list[0]);
     }
 
@@ -78,6 +79,7 @@
             alert("列表为空！");
             return;
         }
+        alert("您删除的元素为： "+list[list.length - 1].innerHTML);
         queue.removeChild(list[list.length - 1]);
     }
 
