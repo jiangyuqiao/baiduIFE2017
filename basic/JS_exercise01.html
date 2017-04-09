@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>IFE JavaScript Exercise 01</title>
+</head>
+<style>
+    #queue {
+        list-style-type: none;
+    }
+    
+    #queue li {
+        float: left;
+        margin: 5px;
+        width: 50px;
+        height: 50px;
+        color: white;
+        background-color: red;
+        text-align: center;
+        font-size: 30px;
+    }
+</style>
+
+<script>
+    var queue, list, childNodes;
+
+    window.onload = function () {
+        queue = document.getElementById("queue");
+        list = queue.getElementsByTagName("li");
+        childNodes = queue.childNodes;
+    };
+
+    function leftin() {
+        // 检查输入合法性
+        var inputstr = document.getElementById("input").value;
+        var num = parseInt(inputstr);
+        if( num.toString() != inputstr || num == NaN ) {
+            alert("输入非法！");
+            return;
+        }
+
+        // 创建新li元素并插入
+        var newli = document.createElement("li");
+        newli.innerHTML = inputstr;
+        queue.insertBefore(newli, list[0]);
+    }
+
+    function rightin() {
+        // 检查输入合法性
+        var inputstr = document.getElementById("input").value;
+        var num = parseInt(inputstr);
+        if( num.toString() != inputstr || num == NaN ) {
+            alert("输入非法！");
+            return;
+        }
+
+        // 创建新li元素并插入
+        var newli = document.createElement("li");
+        newli.innerHTML = inputstr;
+        queue.appendChild(newli);
+    }
+
+    function leftout() {
+        if(list.length == 0) {
+            alert("列表为空！");
+            return;
+        }
+        queue.removeChild(list[0]);
+    }
+
+    function rightout() {
+        if(list.length == 0) {
+            alert("列表为空！");
+            return;
+        }
+        queue.removeChild(list[list.length - 1]);
+    }
+
+</script>
+
+<body>
+    <input type="text" id="input">
+    <button id="leftin" onclick="leftin()">左侧入</button>
+    <button id="rightin" onclick="rightin()">右侧入</button>&nbsp;
+    <button id="leftout" onclick="leftout()">左侧出</button>
+    <button id="rightout" onclick="rightout()">右侧出</button>
+    <div>
+        <ul id="queue">
+            <li>1</li>
+            <li>2</li>
+        </ul>
+    </div>
+</body>
+
+</html>
