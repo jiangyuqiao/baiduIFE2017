@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>IFE JavaScript Exercise 02</title>
+</head>
+<style>
+    #queue {
+        list-style-type: none;
+        height: 150px;
+    }
+    
+    #queue li {
+        /*float: left;*/
+        margin-left: 5px;
+        margin-bottom: 0px;
+        width: 25px;
+        color: white;
+        background-color: red;
+        text-align: center;
+        font-size: 9px;
+        display: inline-block;
+        vertical-align: bottom;
+    }
+</style>
+
+<script>
+    var queue, list;
+
+    window.onload = function () {
+        queue = document.getElementById("queue");
+        // list = queue.getElementsByTagName("li");
+        // childNodes = queue.childNodes;
+        list = queue.children;
+        queue.addEventListener("click", function(event) {
+            if(event.target.nodeName.toLowerCase() == "li")
+                queue.removeChild(event.target);
+        });
+        appendNumber(24, false);
+        appendNumber(66, false);
+    };
+
+    function appendNumber(num, isLeftIn) {
+        var newli = document.createElement("li");
+        newli.innerHTML = num;
+        newli.style.height = num+"%";
+        if(isLeftIn) queue.insertBefore(newli, list[0]);
+        else queue.appendChild(newli);
+    }
+
+    function submitNumber(place) {
+        var inputstr = document.getElementById("input").value;
+        var num = parseInt(inputstr);
+        if( num.toString() != inputstr || num == NaN ) {
+            alert("输入非法！");
+            return;
+        }
+
+        if( num<10 || num>100 ) {
+            alert("请输入范围10-100内的数字！")
+            return;
+        }
+
+        if( place == "left" ) appendNumber(num, true);
+        else if ( place == "right" ) appendNumber(num, false);
+        else alert("错误");
+    }
+
+    function leftout() {
+        if(list.length == 0) {
+            alert("列表为空！");
+            return;
+        }
+        alert("您删除的元素为： "+list[0].innerHTML);
+        queue.removeChild(list[0]);
+    }
+
+    function rightout() {
+        if(list.length == 0) {
+            alert("列表为空！");
+            return;
+        }
+        alert("您删除的元素为： "+list[list.length - 1].innerHTML);
+        queue.removeChild(list[list.length - 1]);
+    }
+
+</script>
+
+<body>
+    <input type="text" id="input">
+    <button id="leftin" onclick="submitNumber('left')">左侧入</button>
+    <button id="rightin" onclick="submitNumber('right')">右侧入</button>&nbsp;
+    <button id="leftout" onclick="leftout()">左侧出</button>
+    <button id="rightout" onclick="rightout()">右侧出</button>
+    <div>
+        <ul id="queue">
+        </ul>
+    </div>
+</body>
+
+</html>
