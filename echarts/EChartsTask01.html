@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IFE ECharts Task 01</title>
+    <script src="https://cdn.bootcss.com/echarts/3.5.0/echarts.js"></script>
+</head>
+<body>
+    <div id="chart" style="width: 600px;height:400px;"></div>
+    <script>
+        var time = [];
+        for(var i=0; i<24; ++i) {
+            if(i<10) time.push('0'+i);
+            else time.push(i.toString());
+        }
+        var chart = echarts.init(document.getElementById("chart"));
+        var option = {
+            title: {
+                text: "ECharts 简单示例 - 天气情况",
+            },
+            tooltip: {},
+            legend: {
+                data: ["温度","降水量"],
+                orient: "vertical",
+                z: 100,
+                right: 10,
+                bottom: 105
+            },
+            xAxis: {
+                name: "时间",
+                data: time,
+            },
+            yAxis: {},
+            series: [{
+                name: "降水量",
+                type: "bar",
+                data: [0,0,0,0,0,0,0,0,0,0.4,0,0.6,0,0,0.1,0,0,0,0.2,1.1,0,0,0,0]
+            }, {
+                name: "温度",
+                type: "line",
+                data: [10,10,10,10,10,10,10,10,10,10,10,10,12,12,12,10,9,10,9,9,9,9,9,9]
+            }]
+        };
+
+        chart.setOption(option);
+    </script>
+</body>
+</html>
