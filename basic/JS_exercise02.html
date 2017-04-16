@@ -36,44 +36,44 @@
         total = document.getElementById("total");
         total.innerHTML = list.length;
 
-        queue.addEventListener("click", function(event) {
-            if(event.target.nodeName.toLowerCase() == "li")
+        queue.addEventListener("click", function (event) {
+            if (event.target.nodeName.toLowerCase() == "li")
                 queue.removeChild(event.target);
         });
         // appendNumber(24, false);
         // appendNumber(66, false);
         // appendNumber(100, false);
-        for(var i=0; i<60; ++i) {
-            appendNumber(Math.floor(Math.random()*90+10, false));
+        for (var i = 0; i < 30; ++i) {
+            appendNumber(Math.floor(Math.random() * 90 + 10, false));
         }
 
     };
 
     function removeNumber(isLeftOut) {
-        if(list.length == 0) {
+        if (list.length == 0) {
             alert("列表为空！");
             return;
         }
         var numberToRemove;
-        if(isLeftOut) numberToRemove = list[0];
+        if (isLeftOut) numberToRemove = list[0];
         else numberToRemove = list[list.length - 1];
-        alert("您删除的元素为： "+numberToRemove.innerHTML);
+        alert("您删除的元素为： " + numberToRemove.innerHTML);
         queue.removeChild(numberToRemove);
         total.innerHTML = list.length;
     }
 
     function appendNumber(num, isLeftIn) {
-        if(list.length>=60) {
+        if (list.length >= 60) {
             alert("元素个数不能超过60个！");
             return;
         }
         var newli = document.createElement("li");
         newli.innerHTML = num;
-        newli.style.height = num+"%";
+        newli.style.height = num + "%";
         newli.style.position = "relative";
-        newli.style.top = (100-num)+"%";
+        newli.style.top = (100 - num) + "%";
 
-        if(isLeftIn) queue.insertBefore(newli, list[0]);
+        if (isLeftIn) queue.insertBefore(newli, list[0]);
         else queue.appendChild(newli);
         total.innerHTML = list.length;
     }
@@ -81,17 +81,61 @@
     function submitNumber(isLeftIn) {
         var inputstr = document.getElementById("input").value;
         var num = parseInt(inputstr);
-        if( num.toString() != inputstr || num == NaN ) {
+        if (num.toString() != inputstr || num == NaN) {
             alert("输入非法！");
             return;
         }
 
-        if( num<10 || num>100 ) {
+        if (num < 10 || num > 100) {
             alert("请输入范围10-100内的数字！")
             return;
         }
         appendNumber(num, isLeftIn);
     }
+
+    // www.zhihu.com/question/31636244/answer/52835780
+    function sleep(time) {
+        return new Promise(resolve => setTimeout(resolve, time));
+    }
+
+    async function sort() {
+        var intervalTime = 300;
+
+        // 更小的索引务必是第一个参数
+        function swap(i, j) {
+            // console.log("swap(" + (j - 1) + "," + j + ")");
+            var temp = queue.removeChild(list[i]);
+            temp = queue.replaceChild(temp, list[j - 1]);
+            queue.insertBefore(temp, list[i]);
+        }
+
+        function colorize(i, color) {
+            list[i].style.backgroundColor = color;
+        }
+
+        function less(i, j) {
+            // console.log("less(" + i + "," + j + ")");
+            return parseInt(list[i].innerHTML) < parseInt(list[j].innerHTML);
+        }
+
+        for (var i = 1; i < list.length; ++i) {
+            for(var k=0; k<i; ++k)
+                colorize(k, "grey");
+            await sleep(intervalTime);
+            colorize(i, "blue");
+            for (var j = i; j-1>=0 && less(j,j-1); --j) {
+                await sleep(intervalTime);
+                colorize(j-1, "red");
+                swap(j-1,j);
+            }
+            await sleep(intervalTime);
+            colorize(j, "red");
+        }
+
+        for (var i = 0; i < list.length; ++i)
+            colorize(i, "red");
+    }
+
 </script>
 
 <body>
@@ -101,6 +145,7 @@
         <button id="rightin" onclick="submitNumber(false)">右侧入</button>&nbsp;
         <button id="leftout" onclick="removeNumber(true)">左侧出</button>
         <button id="rightout" onclick="removeNumber(false)">右侧出</button>&nbsp;
+        <button id="sort" onclick="sort()">插入排序</button>&nbsp;
         <span>元素总数：</span><span id="total"></span>
     </div>
     <div>
