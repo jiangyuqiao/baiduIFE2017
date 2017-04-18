@@ -93,15 +93,15 @@
         appendNumber(num, isLeftIn);
     }
 
-    // www.zhihu.com/question/31636244/answer/52835780
-    function sleep(time) {
-        return new Promise(resolve => setTimeout(resolve, time));
-    }
-
     /*
     ** 即时显示排序动画效果
     
     async function sort_instant() {
+        // www.zhihu.com/question/31636244/answer/52835780
+        function sleep(time) {
+            return new Promise(resolve => setTimeout(resolve, time));
+        }
+
         var intervalTime = 300;
 
         // 更小的索引务必是第一个参数
@@ -200,10 +200,10 @@
         steps.push(clone(numlist));
 
         var step = 0;
-        var animation = setInterval(function() {
+        var animation = setInterval(function () {
             render(steps[step]);
             ++step;
-            if(step>steps.length-1) clearInterval(animation);
+            if (step > steps.length - 1) clearInterval(animation);
         }, intervalTime);
     }
 
