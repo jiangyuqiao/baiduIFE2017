@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>IFE JavaScript Exercise 03</title>
+    <style>
+        #display {
+            list-style-type: none;
+            height: 150px;
+        }
+
+        .group {
+            margin:20px;
+        }
+
+        .element {
+            min-width: 100px;
+            height: 50px;
+            padding-left: 10px;
+            padding-right: 10px;
+            margin-left: 15px;
+            margin-top: 15px;
+            line-height: 50px;
+            border: 3px solid black;
+            color: white;
+            background-color: grey;
+            text-align: center;
+            font-size: 20px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        em {
+            color: red;
+            font-style: normal;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="group">
+        <div id="operation">
+            <button id="leftin">左侧入</button>
+            <button id="rightin">右侧入</button>&nbsp;
+            <button id="leftout">左侧出</button>
+            <button id="rightout">右侧出</button>&nbsp;
+            <span>元素总数：</span><span id="total"></span>
+        </div>
+        <textarea cols="40" rows="8" placeholder="输入数据，可批量输入" id="input"></textarea>
+    </div>
+
+    <div class="group">
+        <input type="text" id="keyword" placeholder="输入关键词">
+        <button id="search">搜索</button>
+    </div>
+
+    <div>
+        <ul id="display">
+            <li class="element">example</li>
+        </ul>
+    </div>
+
+    <script>
+        var list = ["example","example2"];
+        
+        var inputarea = document.getElementById("input");
+        var searchbox = document.getElementById("keyword");
+        var keyword;
+
+        var operations = document.getElementById("operation").getElementsByTagName("button");
+        var display = document.getElementById("display");
+
+        render(); // 初始化绘制
+
+        // 点击元素删除
+        display.addEventListener("click", function (event) {
+            if (event.target.className.toLowerCase() == "element") {
+                deleteItem(parseInt(event.target.getAttribute("serial")))
+            }
+        });
+
+        // 为点击按钮事件绑定处理函数
+        for(var i=0; i<operations.length; ++i) {
+            operations[i].addEventListener("click", function(event) {
+                operate(event.target.getAttribute("id"));
+            });
+        }
+
+        document.getElementById("search").addEventListener("click", function(){
+            keyword = searchbox.value;
+            render();
+        });
+
+        function operate(operation) {
+            console.log(operation);
+            if(operation == "leftout") {
+                deleteItem(0);
+            } else if (operation == "rightout") {
+                deleteItem(list.length-1);
+            } else if (operation == "leftin" || operation == "rightin") {
+                addItem( parse(inputarea.value), (operation == "leftin" ? true : false));
+                inputarea.value = "";
+            }
+        }
+
+        function parse(rawInput) {
+            return rawInput.split(/[\n\t\s,，、]/);
+        }
+
+        function deleteItem(serial) {
+            if(confirm("确认要删除："+list[serial]+"？")) {
+                list.splice(serial,1);
+                render();
+            }
+        }
+
+        function addItem(inputlist, toLeft) {
+            if(toLeft) {
+                list = inputlist.concat(list);
+            } else {
+                list = list.concat(inputlist);
+            }
+            render();
+        }
+
+        function render() {
+            var element, fragment = document.createDocumentFragment();
+            if(keyword) {
+                var re = new RegExp(keyword, "g");
+                for(var i=0; i<list.length; ++i) {
+                    element = document.createElement("li");
+                    element.className = "element";
+                    element.setAttribute("serial", i);
+                    element.innerHTML = list[i].replace(re,"<em>"+keyword+"</em>");
+                    fragment.appendChild(element);
+                }
+            } else {
+                for(var i=0; i<list.length; ++i) {
+                    element = document.createElement("li");
+                    element.className = "element";
+                    element.setAttribute("serial", i);
+                    element.innerHTML = list[i];
+                    fragment.appendChild(element);
+                }
+            }
+            display.innerHTML = "";
+            display.appendChild(fragment);
+
+            document.getElementById("total").innerHTML = list.length;
+        }
+    </script>
+
+</body>
+
+</html>

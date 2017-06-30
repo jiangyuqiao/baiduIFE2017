@@ -39,6 +39,7 @@
         queue.addEventListener("click", function (event) {
             if (event.target.nodeName.toLowerCase() == "li")
                 queue.removeChild(event.target);
+                total.innerHTML = list.length;
         });
         // appendNumber(24, false);
         // appendNumber(66, false);
@@ -170,6 +171,7 @@
 
         function render(numlist) {
             queue.innerHTML = "";
+            var queueContent = document.createDocumentFragment();
             for (var i = 0; i < numlist.length; ++i) {
                 var newli = document.createElement("li");
                 newli.innerHTML = numlist[i][0];
@@ -177,8 +179,9 @@
                 newli.style.position = "relative";
                 newli.style.top = (100 - numlist[i][0]) + "%";
                 newli.style.backgroundColor = numlist[i][1];
-                queue.appendChild(newli);
+                queueContent.appendChild(newli);
             }
+            queue.appendChild(queueContent);
         }
 
         var steps = [];
